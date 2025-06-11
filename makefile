@@ -1,3 +1,6 @@
+include .env
+export $(shell sed 's/=.*//' .env)
+
 .PHONY: help up down restart build rebuild logs clean ps shell
 
 # Default target

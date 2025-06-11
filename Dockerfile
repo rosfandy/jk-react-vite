@@ -15,7 +15,7 @@ COPY ./src .
 # Build the application
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 3010
 
 # Start the application in production mode
-CMD [ "serve", "-s", "dist" ]
+CMD [ "serve", "-s", "dist", "-l", "3010" ]

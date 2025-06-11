@@ -2,7 +2,7 @@ services:
   reactjs-app:
     build: .
     ports:
-      - "3000:3000"
+      - "3010:3010"
     environment:
       - VITE_BASE_API_URL=${API_URL}
     volumes:
