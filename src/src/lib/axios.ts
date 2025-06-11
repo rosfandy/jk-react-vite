@@ -63,6 +63,8 @@ export const LoginRequest = async (
   credentials: { email: string; password: string }
 ) => {
   try {
+    console.log(BASE_URL);
+
     const res = await axios.post(`${BASE_URL}/api/${url}`, credentials);
 
     if (res.status === 200 && res.data.token) {

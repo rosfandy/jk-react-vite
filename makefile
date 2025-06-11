@@ -50,7 +50,7 @@ clean:
 
 # Enter container shell
 shell:
-	docker exec -it src-nestjs-app-1 sh
+	docker exec -it docker-react-fe-reactjs-app-1 sh
 
 # Quick restart with rebuild
 fresh: down rebuild up
