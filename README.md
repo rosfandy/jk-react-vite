@@ -15,15 +15,10 @@ Currently, two official plugins are available:
 cp .env.example .env
 ```
 
-Update the `DATABASE` in your `.env` file based on your setup:
+Update the `API_URL` in your `.env` file based on your setup:
 
 ```yaml
-DATABASE_CONNECTION=postgres
-DATABASE_HOST=host.docker.internal
-DATABASE_NAME=
-DATABASE_USER=
-DATABASE_PASSWORD=
-DATABASE_PORT=
+API_URL=http://localhost:3030
 ```
 
 > 💡 **Tip:** Use `host.docker.internal` when your PostgreSQL runs on the Docker host machine
@@ -45,4 +40,4 @@ make logs
 make help
 ```
 
-App berjalan di <http://localhost:3000/>
+App berjalan di [http://localhost:3010/](http://localhost:3000/)
