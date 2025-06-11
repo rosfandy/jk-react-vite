@@ -1,0 +1,11 @@
+services:
+  reactjs-app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_BASE_API_URL=${API_URL}
+    volumes:
+      - ./src:/app/src
+      - /app/node_modules
+    restart: unless-stopped
