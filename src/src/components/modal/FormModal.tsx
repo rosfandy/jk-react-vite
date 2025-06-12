@@ -7,15 +7,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type React from "react";
 
 interface Props {
   title: string;
-  description? : string;
+  description?: string;
   action: string;
   children?: React.ReactNode;
 }
 
-export function FormModal({ children, title, description = "", action}: Props) {
+export function FormModal({
+  children,
+  title,
+  description = "",
+  action,
+}: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>

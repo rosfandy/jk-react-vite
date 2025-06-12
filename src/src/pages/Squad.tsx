@@ -1,5 +1,10 @@
 // import DashboardLayout from "@/layout/DashboardLayout";
-import { GetRequest, PostRequest, DeleteRequest } from "@/lib/axios";
+import {
+  GetRequest,
+  PostRequest,
+  DeleteRequest,
+  PutRequest,
+} from "@/lib/axios";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -115,6 +120,38 @@ export default function SquadPage() {
       setLoading(false);
     }
   };
+  const handleEdit = async (  
+    id: number,
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const payload: Record<string, any> = Object.fromEntries(formData.entries());
+    payload.general_project_id = parseInt(payload.general_project_id);
+    payload.anggota = selectedUsers.map((u) => u.value);
+    console.log(payload);
+
+    setLoading(true);
+    try {
+      const res = await PutRequest(`squads/${id}`, payload);
+      console.log(res);
+      if (res.status === 200) {
+        setSuccess("Squad Edited successfully");
+
+        resetForm(e.target as HTMLFormElement);
+
+        await getSquads();
+
+        setTimeout(() => {
+          setSuccess(null);
+        }, 3000);
+      }
+    } catch (error) {
+      console.error(`Error editing squad: with id: ${id}`, error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -162,6 +199,7 @@ export default function SquadPage() {
                   isMulti
                   name="anggota"
                   options={userOptions}
+                  isClearable
                   className="basic-multi-select focus:outline-none"
                   classNamePrefix="select"
                   onChange={handleUsersChange}
@@ -216,8 +254,11 @@ export default function SquadPage() {
                     </div>
                   </TableCell>
                   <TableCell className="text-right space-x-2">
-                    <FormModal title="Tambah Squad" action="Edit">
-                      <form id="squadForm" onSubmit={handleSubmit}>
+                    <FormModal title="Edit Squad" action="Edit">
+                      <form
+                        id="squadForm"
+                        onSubmit={(e) => handleEdit(squad.id, e)}
+                      >
                         {success && (
                           <div className="bg-green-300 px-4 py-2 my-2 rounded">
                             {success}
@@ -227,8 +268,8 @@ export default function SquadPage() {
                           <span className="text-xs px-3">Name Squad</span>
                           <input
                             type="text"
-                            name="name"
-                            value={squads[index].Name}
+                            name="Name"
+                            defaultValue={squads[index].Name}
                             placeholder="Name Squad"
                             className="focus:outline-none focus:ring-0 border-none bg-transparent w-full px-3 pt-0"
                             required
@@ -239,7 +280,7 @@ export default function SquadPage() {
                           <span className="text-xs px-3">Project</span>
                           <select
                             name="general_project_id"
-                            value={squads[index].projects.nama}
+                            defaultValue={squads[index].projects.nama}
                             className="focus:outline-none focus:ring-0 border-none bg-transparent w-full px-3 pt-0"
                             required
                           >
@@ -261,25 +302,27 @@ export default function SquadPage() {
                           <Select<UserOption, true>
                             isMulti
                             name="anggota"
+                            isClearable
                             options={userOptions}
                             className="basic-multi-select focus:outline-none"
                             classNamePrefix="select"
                             // onChange={handleUsersChange}
                             // Set selected users based on squad.team
-                            value={userOptions.filter((option) =>
+                            defaultValue={userOptions.filter((option) =>
                               squads[index].team.some(
                                 (user) => user.id === option.value
                               )
                             )}
-                            onChange={(selectedOptions) => {
+                            onChange={(selectedUsers) => {
                               const updatedSquads = [...squads];
-                              updatedSquads[index].team = selectedOptions.map(
+                              updatedSquads[index].team = selectedUsers.map(
                                 (option) => ({
                                   id: option.value,
                                   name: option.label,
                                 })
                               );
-                              setSquads(updatedSquads);
+                              console.log(selectedUsers);
+                              setSelectedUsers(Array.from(selectedUsers));
                             }}
                             placeholder="Select team members"
                           />
@@ -292,7 +335,7 @@ export default function SquadPage() {
                             className="border px-4 py-2"
                             disabled={loading}
                           >
-                            {loading ? "Creating..." : "Submit"}
+                            {loading ? "Updating..." : "Update"}
                           </Button>
                         </div>
                       </form>

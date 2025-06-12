@@ -1,3 +1,4 @@
+// import { getSquad } from "@/api/api";
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;
